@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Join the Starwave Crew{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+    <h1>Apply for Crew Access</h1>
+    <p class="auth-card__intro">Create an account to share updates as part of the moderation team.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="auth-grid">
+            {% for field in form.visible_fields %}
+                <label class="auth-field">
+                    <span class="auth-field__label">{{ field.label }}</span>
+                    {{ field }}
+                    {% if field.help_text %}<span class="auth-field__help">{{ field.help_text }}</span>{% endif %}
+                    {{ field.errors }}
+                </label>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn-primary">Request access</button>
+    </form>
+</section>
+{% endblock %}

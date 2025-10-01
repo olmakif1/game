@@ -1,0 +1,31 @@
+<article class="announcement" data-announcement data-id="{{ announcement.id }}" data-category="{{ announcement.category }}" data-pinned="{{ announcement.is_pinned|yesno:'true,false' }}">
+    <header class="announcement__header">
+        <div>
+            <h3 class="announcement__title">{{ announcement.title }}</h3>
+            <p class="announcement__meta">
+                <span class="announcement__author">{{ announcement.author_display }}</span>
+                <span class="announcement__separator">•</span>
+                <time datetime="{{ announcement.published_at|date:"c" }}">{{ announcement.published_at|date:"M j, Y H:i" }}</time>
+            </p>
+        </div>
+        <div class="announcement__badges">
+            <span class="badge badge--category">{{ announcement.category_label }}</span>
+            {% if announcement.is_pinned %}
+                <span class="badge badge--pinned">Pinned</span>
+            {% endif %}
+        </div>
+    </header>
+    <p class="announcement__summary">{{ announcement.summary }}</p>
+    <div class="announcement__content">{{ announcement.content|linebreaksbr }}</div>
+    {% if announcement.tags %}
+        <ul class="announcement__tags">
+            {% for tag in announcement.tags %}
+                <li>#{{ tag }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <footer class="announcement__footer">
+        <button type="button" data-action="mark-read">Mark as read</button>
+        <button type="button" data-action="toggle-pin">Pin locally</button>
+    </footer>
+</article>

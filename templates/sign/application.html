@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Moderator Application{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+    <h1>Join the Moderator Crew</h1>
+    <p class="auth-card__intro">Tell us how you want to help keep the Starwave community vibrant.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="auth-grid">
+            {% for field in form.visible_fields %}
+                <label class="auth-field">
+                    <span class="auth-field__label">{{ field.label }}</span>
+                    {{ field }}
+                    {{ field.errors }}
+                </label>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn-primary">Submit application</button>
+    </form>
+    {% if messages %}
+        <ul class="message-stream">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</section>
+{% endblock %}
