@@ -34,6 +34,17 @@
     </header>
 
     <main class="site-content">
+        codex/develop-fan-server-announcement-board
+        {% if messages %}
+            <ul class="site-messages">
+                {% for message in messages %}
+                    <li class="site-message site-message--{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+=======
+        main
         {% block content %}{% endblock %}
     </main>
 
@@ -41,7 +52,10 @@
         <p>Powered by the Starwave community — synchronized with Django architecture inspired by the NewsPortal project.</p>
     </footer>
 
+        codex/develop-fan-server-announcement-board
+=======
     <script src="{% static 'js/board.js' %}" defer></script>
+        main
     {% block extra_js %}{% endblock %}
 </body>
 </html>

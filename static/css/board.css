@@ -199,21 +199,71 @@ body.theme-starwave {
 }
 
 .board__controls {
+        codex/develop-fan-server-announcement-board
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+       
   display: grid;
   grid-template-columns: 1fr auto auto;
   gap: 20px;
   align-items: center;
+        main
 }
 
 .board__search {
   display: flex;
+        codex/develop-fan-server-announcement-board
+  flex-direction: column;
+  gap: 1rem;
+  background: var(--color-surface);
+  padding: 1.25rem;
+       
   align-items: center;
   background: var(--color-surface);
   padding: 8px;
+        main
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-border);
 }
 
+        codex/develop-fan-server-announcement-board
+.board__search-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.board__search-fields input,
+.board__search-fields select {
+  min-width: 12rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.9rem;
+  color: var(--color-text);
+}
+
+.board__search-fields input:focus,
+.board__search-fields select:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.board__search-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.board__search-actions .link {
+  color: var(--color-accent);
+}
+
+.board__search button {
+  align-self: flex-start;
+=======
 .board__search input {
   flex: 1;
   background: transparent;
@@ -228,11 +278,16 @@ body.theme-starwave {
 }
 
 .board__search button {
+        main
   background: var(--color-accent);
   color: white;
   border: none;
   border-radius: var(--radius-sm);
+        codex/develop-fan-server-announcement-board
+  padding: 0.6rem 1.5rem;
+       
   padding: 10px 18px;
+        main
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
@@ -346,6 +401,45 @@ body.theme-starwave {
   text-align: center;
 }
 
+        codex/develop-fan-server-announcement-board
+.form-errors,
+.field-errors {
+  margin: 0.5rem 0 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 99, 132, 0.12);
+  color: #ff6f91;
+  font-size: 0.95rem;
+}
+
+.site-messages {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.site-message {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 210, 255, 0.1);
+  border: 1px solid rgba(0, 210, 255, 0.35);
+}
+
+.site-message--success {
+  background: rgba(0, 220, 160, 0.12);
+  border-color: rgba(0, 220, 160, 0.4);
+}
+
+.site-message--error,
+.site-message--warning {
+  background: rgba(255, 152, 0, 0.15);
+  border-color: rgba(255, 152, 0, 0.45);
+}
+
+       
+        main
 .announcement {
   background: linear-gradient(140deg, rgba(17, 11, 31, 0.92), rgba(122, 75, 255, 0.2));
   border-radius: var(--radius-lg);

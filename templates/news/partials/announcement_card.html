@@ -1,4 +1,8 @@
+        codex/develop-fan-server-announcement-board
+<article class="announcement">
+=======
 <article class="announcement" data-announcement data-id="{{ announcement.id }}" data-category="{{ announcement.category }}" data-pinned="{{ announcement.is_pinned|yesno:'true,false' }}">
+        main
     <header class="announcement__header">
         <div>
             <h3 class="announcement__title">{{ announcement.title }}</h3>
@@ -24,8 +28,11 @@
             {% endfor %}
         </ul>
     {% endif %}
+        codex/develop-fan-server-announcement-board
+=======
     <footer class="announcement__footer">
         <button type="button" data-action="mark-read">Mark as read</button>
         <button type="button" data-action="toggle-pin">Pin locally</button>
     </footer>
+        main
 </article>
