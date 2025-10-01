@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Starwave Control Room{% endblock %}</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap">
+    <link rel="stylesheet" href="{% static 'css/board.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="theme-starwave">
+    <header class="site-header">
+        <div class="site-branding">
+            <div class="brand-mark" aria-hidden="true">★</div>
+            <div class="brand-copy">
+                <span class="brand-kicker">Starwave</span>
+                <span class="brand-title">Fan Server Command Center</span>
+            </div>
+        </div>
+        <nav class="site-nav">
+            <a href="{% url 'news:board' %}" class="nav-link">Board</a>
+            <a href="{% url 'protect:dashboard' %}" class="nav-link">Moderation</a>
+            <a href="{% url 'sign:apply' %}" class="nav-link">Join the Crew</a>
+            {% if user.is_authenticated %}
+                <form action="{% url 'logout' %}" method="post" class="nav-link nav-button">
+                    {% csrf_token %}
+                    <button type="submit">Log out</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="nav-link">Log in</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="site-content">
+        {% if messages %}
+            <ul class="site-messages">
+                {% for message in messages %}
+                    <li class="site-message site-message--{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>Powered by the Starwave community — synchronized with Django architecture inspired by the NewsPortal project.</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

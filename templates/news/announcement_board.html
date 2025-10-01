@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Starwave Announcement Board{% endblock %}
+
+{% block content %}
+<section class="board">
+    <header class="board__header">
+        <div>
+            <h1 class="board__title">Announcement Board</h1>
+            <p class="board__subtitle">Mission control for the latest transmissions from Starwave HQ and the fan signal corps.</p>
+        </div>
+        <div class="board__metrics">
+            <div class="metric" data-metric="total">
+                <span class="metric__value" data-metric-value="total">{{ metrics.total }}</span>
+                <span class="metric__label">Active posts</span>
+            </div>
+            <div class="metric" data-metric="pinned">
+                <span class="metric__value" data-metric-value="pinned">{{ metrics.pinned }}</span>
+                <span class="metric__label">Pinned</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="board__controls">
+        <form class="board__search" method="get">
+            <div class="board__search-fields">
+                <label for="board-search" class="sr-only">Search announcements</label>
+                <input
+                    id="board-search"
+                    name="q"
+                    type="search"
+                    placeholder="Search transmissions"
+                    value="{{ search_term }}"
+                />
+                <label for="board-category" class="sr-only">Filter by category</label>
+                <select id="board-category" name="category">
+                    <option value="">All categories</option>
+                    {% for value, label in categories %}
+                        <option value="{{ value }}"{% if value == selected_category %} selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="board__search-actions">
+                <button type="submit">Apply</button>
+                <a href="{% url 'news:board' %}" class="link">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="board__layout">
+        <aside class="board__aside">
+            <section class="pinned">
+                <h2>Pinned Signals</h2>
+                {% if pinned_announcements %}
+                    {% for announcement in pinned_announcements %}
+                        {% include "news/partials/announcement_card.html" with announcement=announcement %}
+                    {% endfor %}
+                {% else %}
+                    <p class="empty">No pinned announcements yet.</p>
+                {% endif %}
+            </section>
+        </aside>
+        <section class="board__stream">
+            {% if regular_announcements %}
+                {% for announcement in regular_announcements %}
+                    {% include "news/partials/announcement_card.html" with announcement=announcement %}
+                {% endfor %}
+            {% else %}
+                <p class="empty">No transmissions match your filters. Adjust the search or channel selection.</p>
+            {% endif %}
+        </section>
+    </div>
+
+    <section class="board__form" id="moderator-form">
+        <h2>Broadcast a New Announcement</h2>
+        <p class="board__form-hint">Only visible to logged in crew members. Submit details below to share across the network.</p>
+        <form method="post" action="{% url 'news:board' %}">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="form-errors">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <div class="form-grid">
+                <label>Title {{ form.title }}</label>
+                {% if form.title.errors %}<div class="field-errors">{{ form.title.errors }}</div>{% endif %}
+                <label>Summary {{ form.summary }}</label>
+                {% if form.summary.errors %}<div class="field-errors">{{ form.summary.errors }}</div>{% endif %}
+                <label>Content {{ form.content }}</label>
+                {% if form.content.errors %}<div class="field-errors">{{ form.content.errors }}</div>{% endif %}
+                <label>Category {{ form.category }}</label>
+                {% if form.category.errors %}<div class="field-errors">{{ form.category.errors }}</div>{% endif %}
+                <label>Tags {{ form.tags }}</label>
+                {% if form.tags.errors %}<div class="field-errors">{{ form.tags.errors }}</div>{% endif %}
+                <label>Author {{ form.author_display }}</label>
+                {% if form.author_display.errors %}<div class="field-errors">{{ form.author_display.errors }}</div>{% endif %}
+                <label class="form-checkbox">{{ form.is_pinned }} Pin this transmission</label>
+                {% if form.is_pinned.errors %}<div class="field-errors">{{ form.is_pinned.errors }}</div>{% endif %}
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Publish</button>
+            </div>
+        </form>
+    </section>
+</section>
+{% endblock %}
