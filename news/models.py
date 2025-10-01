@@ -67,3 +67,20 @@ class Announcement(models.Model):
     def category_label(self) -> str:
         return dict(self.CATEGORY_CHOICES).get(self.category, self.category.title())
 
+       codex/develop-fan-server-announcement-board
+=======
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "id": self.pk,
+            "slug": self.slug,
+            "title": self.title,
+            "summary": self.summary,
+            "content": self.content,
+            "author": self.author_display,
+            "category": self.category,
+            "category_label": self.category_label,
+            "tags": self.tags,
+            "is_pinned": self.is_pinned,
+            "published_at": self.published_at.isoformat(),
+        }
+        main

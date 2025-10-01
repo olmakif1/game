@@ -1,3 +1,4 @@
+        codex/develop-fan-server-announcement-board
 from __future__ import annotations
 
 from django.contrib.auth import get_user_model
@@ -117,3 +118,8 @@ class AnnouncementBoardViewTests(TestCase):
 
         self.assertTrue(form.is_valid(), form.errors)
         self.assertEqual(form.cleaned_data["tags"], ["one", "two", "three"])
+=======
+from django.test import TestCase
+
+# Create your tests here.
+        main

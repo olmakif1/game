@@ -199,21 +199,35 @@ body.theme-starwave {
 }
 
 .board__controls {
+        codex/develop-fan-server-announcement-board
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+       
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 20px;
+  align-items: center;
+        main
 }
 
 .board__search {
   display: flex;
+        codex/develop-fan-server-announcement-board
   flex-direction: column;
   gap: 1rem;
   background: var(--color-surface);
   padding: 1.25rem;
+       
+  align-items: center;
+  background: var(--color-surface);
+  padding: 8px;
+        main
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-border);
 }
 
+        codex/develop-fan-server-announcement-board
 .board__search-fields {
   display: flex;
   flex-wrap: wrap;
@@ -249,11 +263,31 @@ body.theme-starwave {
 
 .board__search button {
   align-self: flex-start;
+=======
+.board__search input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  color: var(--color-text);
+  padding: 10px;
+}
+
+.board__search input:focus {
+  outline: none;
+}
+
+.board__search button {
+        main
   background: var(--color-accent);
   color: white;
   border: none;
   border-radius: var(--radius-sm);
+        codex/develop-fan-server-announcement-board
   padding: 0.6rem 1.5rem;
+       
+  padding: 10px 18px;
+        main
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
@@ -367,6 +401,7 @@ body.theme-starwave {
   text-align: center;
 }
 
+        codex/develop-fan-server-announcement-board
 .form-errors,
 .field-errors {
   margin: 0.5rem 0 1rem;
@@ -403,6 +438,8 @@ body.theme-starwave {
   border-color: rgba(255, 152, 0, 0.45);
 }
 
+       
+        main
 .announcement {
   background: linear-gradient(140deg, rgba(17, 11, 31, 0.92), rgba(122, 75, 255, 0.2));
   border-radius: var(--radius-lg);

@@ -1,9 +1,18 @@
 from __future__ import annotations
 
+        codex/develop-fan-server-announcement-board
 from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.utils import timezone
+=======
+import json
+
+from django.contrib import messages
+from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.utils import timezone
+from django.views import View
+        main
 from django.views.generic import ListView
 
 from .forms import AnnouncementForm
@@ -15,6 +24,7 @@ class AnnouncementBoardView(ListView):
     context_object_name = "announcements"
 
     def get_queryset(self):  # type: ignore[override]
+        codex/develop-fan-server-announcement-board
         queryset = Announcement.objects.all().pinned_first()
         search_term = self.request.GET.get("q")
         category = self.request.GET.get("category")
@@ -39,10 +49,31 @@ class AnnouncementBoardView(ListView):
                 "search_term": self.request.GET.get("q", ""),
                 "selected_category": self.request.GET.get("category", ""),
                 "can_publish": self.request.user.is_authenticated,
+=======
+        queryset = Announcement.objects.all()
+        search_term = self.request.GET.get("q")
+        category = self.request.GET.get("category")
+        queryset = queryset.search(search_term).for_category(category).pinned_first()
+        return queryset
+
+    def get_context_data(self, **kwargs):  # type: ignore[override]
+        context = super().get_context_data(**kwargs)
+        announcements = context['announcements']
+        context.update(
+            {
+                "categories": Announcement.CATEGORY_CHOICES,
+                "form": AnnouncementForm(),
+                "metrics": {
+                    "total": announcements.count(),
+                    "pinned": announcements.filter(is_pinned=True).count(),
+                },
+                "initial_payload": [item.to_dict() for item in announcements],
+        main
             }
         )
         return context
 
+        codex/develop-fan-server-announcement-board
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         if not request.user.is_authenticated:
             messages.error(request, "Log in to share a new announcement with the crew.")
@@ -60,6 +91,34 @@ class AnnouncementBoardView(ListView):
         self.object_list = self.get_queryset()
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
+=======
+
+class AnnouncementFeedView(View):
+    def get(self, request: HttpRequest) -> JsonResponse:
+        queryset = Announcement.objects.all().pinned_first()
+        search_term = request.GET.get("q")
+        category = request.GET.get("category")
+        queryset = queryset.search(search_term).for_category(category)
+        return JsonResponse({"announcements": [item.to_dict() for item in queryset]})
+
+
+class AnnouncementCreateView(View):
+    def post(self, request: HttpRequest) -> JsonResponse:
+        if request.content_type == "application/json":
+            payload = json.loads(request.body or "{}")
+            form = AnnouncementForm(payload)
+        else:
+            form = AnnouncementForm(request.POST)
+
+        if form.is_valid():
+            announcement: Announcement = form.save(commit=False)
+            announcement.published_at = timezone.now()
+            announcement.save()
+            messages.success(request, "Announcement published to the board.")
+            return JsonResponse({"success": True, "announcement": announcement.to_dict()})
+
+        return JsonResponse({"success": False, "errors": form.errors}, status=400)
+        main
 
 
 def board(request: HttpRequest) -> HttpResponse:
