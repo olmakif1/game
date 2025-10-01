@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Log in — Starwave Crew{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+    <h1>Log in</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="auth-grid">
+            {% for field in form.visible_fields %}
+                <label class="auth-field">
+                    <span class="auth-field__label">{{ field.label }}</span>
+                    {{ field }}
+                    {{ field.errors }}
+                </label>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn-primary">Access command center</button>
+    </form>
+    <p class="auth-card__intro">Need credentials? <a href="{% url 'account:signup' %}">Request crew access</a>.</p>
+</section>
+{% endblock %}
