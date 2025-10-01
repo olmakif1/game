@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Starwave Announcement Board{% endblock %}
+
+{% block content %}
+<section class="board" data-feed-url="{% url 'news:announcement-feed' %}" data-create-url="{% url 'news:announcement-create' %}">
+    <header class="board__header">
+        <div>
+            <h1 class="board__title">Announcement Board</h1>
+            <p class="board__subtitle">Mission control for the latest transmissions from Starwave HQ and the fan signal corps.</p>
+        </div>
+        <div class="board__metrics">
+            <div class="metric" data-metric="total">
+                <span class="metric__value" data-metric-value="total">{{ metrics.total }}</span>
+                <span class="metric__label">Active posts</span>
+            </div>
+            <div class="metric" data-metric="pinned">
+                <span class="metric__value" data-metric-value="pinned">{{ metrics.pinned }}</span>
+                <span class="metric__label">Pinned</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="board__controls">
+        <form class="board__search" data-search-form>
+            <label for="board-search" class="sr-only">Search announcements</label>
+            <input id="board-search" name="q" type="search" placeholder="Search transmissions" />
+            <button type="submit">Search</button>
+        </form>
+        <div class="board__filters" data-filter-group>
+            <button type="button" data-category="" class="is-active">All</button>
+            {% for value, label in categories %}
+                <button type="button" data-category="{{ value }}">{{ label }}</button>
+            {% endfor %}
+        </div>
+        <div class="board__toggles">
+            <label>
+                <input type="checkbox" data-toggle="pinned" checked />
+                Show pinned
+            </label>
+            <label>
+                <input type="checkbox" data-toggle="unread" />
+                Unread only
+            </label>
+        </div>
+    </div>
+
+    <div class="board__layout">
+        <aside class="board__aside">
+            <section class="pinned" data-pinned-list>
+                <h2>Pinned Signals</h2>
+                <p class="empty" hidden>No pinned announcements yet.</p>
+            </section>
+            <section class="drafts" data-drafts>
+                <h2>Draft Capsule</h2>
+                <div class="drafts__content">
+                    <p>Autosaves your in-progress announcements locally so you never lose a thought.</p>
+                    <button type="button" data-action="restore-draft">Load last draft</button>
+                    <button type="button" data-action="clear-draft" class="link">Clear</button>
+                </div>
+            </section>
+        </aside>
+        <section class="board__stream" data-announcement-list>
+            <p class="empty"{% if announcements %} hidden{% endif %}>No transmissions match your filters. Adjust the search or channel selection.</p>
+            {% for announcement in announcements %}
+                {% include "news/partials/announcement_card.html" with announcement=announcement %}
+            {% endfor %}
+        </section>
+    </div>
+
+    <section class="board__form" id="moderator-form" data-form-section>
+        <h2>Broadcast a New Announcement</h2>
+        <p class="board__form-hint">Only visible to logged in crew members. Submit details below to share across the network.</p>
+        <form method="post" action="{% url 'news:announcement-create' %}" data-announcement-form>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="form-grid">
+                <label>Title {{ form.title }}</label>
+                <label>Summary {{ form.summary }}</label>
+                <label>Content {{ form.content }}</label>
+                <label>Category {{ form.category }}</label>
+                <label>Tags {{ form.tags }}</label>
+                <label>Author {{ form.author_display }}</label>
+                <label class="form-checkbox">{{ form.is_pinned }} Pin this transmission</label>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Publish</button>
+                <div class="form-status" role="status" aria-live="polite"></div>
+            </div>
+        </form>
+    </section>
+</section>
+
+<section class="toast" data-toast hidden>
+    <p class="toast__message"></p>
+    <button type="button" class="toast__close" aria-label="Dismiss notification">×</button>
+</section>
+
+{{ initial_payload|json_script:'initial-announcements' }}
+{% endblock %}

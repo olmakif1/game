@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Moderation Console{% endblock %}
+
+{% block content %}
+<section class="protect">
+    <h1>Moderation Console</h1>
+    <p class="protect__intro">Review recent transmissions and monitor board health.</p>
+    <div class="protect__metrics">
+        <div class="metric">
+            <span class="metric__value">{{ total }}</span>
+            <span class="metric__label">Total announcements</span>
+        </div>
+        <div class="metric">
+            <span class="metric__value">{{ pinned }}</span>
+            <span class="metric__label">Pinned</span>
+        </div>
+    </div>
+    <section class="protect__recent">
+        <h2>Recent activity</h2>
+        <ul>
+            {% for item in recent %}
+                <li>
+                    <strong>{{ item.title }}</strong>
+                    <span>· {{ item.published_at|date:"M j, H:i" }}</span>
+                    <span class="badge badge--category">{{ item.category_label }}</span>
+                </li>
+            {% empty %}
+                <li>No recent announcements.</li>
+            {% endfor %}
+        </ul>
+    </section>
+</section>
+{% endblock %}
